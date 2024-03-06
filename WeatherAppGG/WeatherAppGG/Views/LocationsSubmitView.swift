@@ -10,6 +10,7 @@ import SnapKit
 
 class LocationSubmitView: UIView {
     
+    // MARK: - Properties
     private lazy var textField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Enter airport location"
@@ -46,6 +47,7 @@ class LocationSubmitView: UIView {
     
     var submitAction: ((String?) -> Void)?
     
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupView()
@@ -56,8 +58,7 @@ class LocationSubmitView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: Setup of the view and layout constraints
-    
+    // MARK: - Setup views and view layouts
     private func setupView() {
         self.backgroundColor = UIColor.gray.withAlphaComponent(0.1)
         self.translatesAutoresizingMaskIntoConstraints = false
