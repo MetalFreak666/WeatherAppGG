@@ -23,11 +23,6 @@ extension DataRequest {
     /// Log the response at the specified `level`.
     public func logResponse(_ level: ResponseLogLevel = .simple) -> Self {
         
-        /*
-        guard Config.isLoggingEnabled else {
-            return self
-        }*/
-
         return response { response in
             guard
                 let request = response.request,

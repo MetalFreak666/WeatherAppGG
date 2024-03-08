@@ -27,7 +27,7 @@ class LocationsViewModel {
                 }
                 
                 let forecastReport: WeatherReport = report
-                print(forecastReport.report.forecast.conditions.count)
+                //print(forecastReport.report.forecast.conditions.count)
                 completion(nil, nil)
             }
         }

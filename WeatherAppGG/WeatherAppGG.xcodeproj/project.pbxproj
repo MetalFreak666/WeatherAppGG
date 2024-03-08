@@ -28,6 +28,11 @@
 		7B27C22D2B98D964001A642C /* AlamofireLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B27C22C2B98D964001A642C /* AlamofireLogging.swift */; };
 		7B27C22F2B98F5A4001A642C /* LocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B27C22E2B98F5A4001A642C /* LocationTableViewCell.swift */; };
 		7B27C2312B98F7C5001A642C /* LastSearchLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B27C2302B98F7C5001A642C /* LastSearchLocation.swift */; };
+		7BEDC50E2B9B33ED002219D9 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC50D2B9B33ED002219D9 /* DetailViewController.swift */; };
+		7BEDC5102B9B3405002219D9 /* LocationConditionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC50F2B9B3405002219D9 /* LocationConditionView.swift */; };
+		7BEDC5122B9B3A68002219D9 /* LocationForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC5112B9B3A68002219D9 /* LocationForecastView.swift */; };
+		7BEDC5142B9B41A8002219D9 /* LocationDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC5132B9B41A8002219D9 /* LocationDetailViewModel.swift */; };
+		7BEDC5162B9B4586002219D9 /* CurrentCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC5152B9B4586002219D9 /* CurrentCondition.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +53,11 @@
 		7B27C22C2B98D964001A642C /* AlamofireLogging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireLogging.swift; sourceTree = "<group>"; };
 		7B27C22E2B98F5A4001A642C /* LocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTableViewCell.swift; sourceTree = "<group>"; };
 		7B27C2302B98F7C5001A642C /* LastSearchLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastSearchLocation.swift; sourceTree = "<group>"; };
+		7BEDC50D2B9B33ED002219D9 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		7BEDC50F2B9B3405002219D9 /* LocationConditionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationConditionView.swift; sourceTree = "<group>"; };
+		7BEDC5112B9B3A68002219D9 /* LocationForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationForecastView.swift; sourceTree = "<group>"; };
+		7BEDC5132B9B41A8002219D9 /* LocationDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailViewModel.swift; sourceTree = "<group>"; };
+		7BEDC5152B9B4586002219D9 /* CurrentCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentCondition.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +116,8 @@
 			children = (
 				7B27C21C2B98D809001A642C /* LocationsSubmitView.swift */,
 				7B27C22E2B98F5A4001A642C /* LocationTableViewCell.swift */,
+				7BEDC50F2B9B3405002219D9 /* LocationConditionView.swift */,
+				7BEDC5112B9B3A68002219D9 /* LocationForecastView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -114,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				7B27C21A2B98D7EE001A642C /* LocationsViewModel.swift */,
+				7BEDC5132B9B41A8002219D9 /* LocationDetailViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -122,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				7B27C2182B98D743001A642C /* LocationsListViewController.swift */,
+				7BEDC50D2B9B33ED002219D9 /* DetailViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -141,6 +155,7 @@
 				7B27C2232B98D8B1001A642C /* WeatherReport.swift */,
 				7B27C2252B98D8C8001A642C /* Forecast.swift */,
 				7B27C2272B98D8ED001A642C /* Condition.swift */,
+				7BEDC5152B9B4586002219D9 /* CurrentCondition.swift */,
 				7B27C2302B98F7C5001A642C /* LastSearchLocation.swift */,
 			);
 			path = Models;
@@ -238,19 +253,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7BEDC5142B9B41A8002219D9 /* LocationDetailViewModel.swift in Sources */,
 				7B27C2192B98D743001A642C /* LocationsListViewController.swift in Sources */,
 				7B27C21D2B98D809001A642C /* LocationsSubmitView.swift in Sources */,
+				7BEDC5162B9B4586002219D9 /* CurrentCondition.swift in Sources */,
+				7BEDC5122B9B3A68002219D9 /* LocationForecastView.swift in Sources */,
 				7B27C2312B98F7C5001A642C /* LastSearchLocation.swift in Sources */,
 				7B27C2242B98D8B1001A642C /* WeatherReport.swift in Sources */,
 				7B27C1F12B98D530001A642C /* AppDelegate.swift in Sources */,
 				7B27C22D2B98D964001A642C /* AlamofireLogging.swift in Sources */,
 				7B27C2262B98D8C8001A642C /* Forecast.swift in Sources */,
 				7B27C22F2B98F5A4001A642C /* LocationTableViewCell.swift in Sources */,
+				7BEDC5102B9B3405002219D9 /* LocationConditionView.swift in Sources */,
 				7B27C1F32B98D531001A642C /* SceneDelegate.swift in Sources */,
 				7B27C2202B98D85F001A642C /* WeatherForecastHTTPClient.swift in Sources */,
 				7B27C2222B98D86E001A642C /* AlamofireWeatherForecastHTTPClient.swift in Sources */,
 				7B27C21B2B98D7EE001A642C /* LocationsViewModel.swift in Sources */,
 				7B27C2282B98D8ED001A642C /* Condition.swift in Sources */,
+				7BEDC50E2B9B33ED002219D9 /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

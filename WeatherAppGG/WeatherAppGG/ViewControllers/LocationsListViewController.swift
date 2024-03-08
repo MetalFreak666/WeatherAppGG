@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class LocationsListViewController: UIViewController {
+class LocationsListViewController: UIViewController, UITableViewDelegate {
     
     // MARK: - Properties
     private let submitView = LocationSubmitView()
@@ -46,6 +46,7 @@ class LocationsListViewController: UIViewController {
     
     private func setupTableView() {
         tableView.dataSource = self
+        tableView.delegate = self
         tableView.register(LocationTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         view.addSubview(tableView)
         tableView.frame = view.bounds
@@ -64,6 +65,13 @@ class LocationsListViewController: UIViewController {
             make.trailing.equalToSuperview()
             make.bottom.equalToSuperview().offset(-60)
         }
+    }
+    
+    // MARK: - Navigation
+    private func navigateToDetailView(with selectedItem: LastSearchLocation) {
+        let detailVC = DetailViewController()
+        
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 
@@ -97,7 +105,7 @@ extension LocationsListViewController {
     }
 }
 
-// MARK: - UITableViewDataSource
+// MARK: - UITableViewDataSource && UITableViewDelegate
 extension LocationsListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -109,5 +117,12 @@ extension LocationsListViewController: UITableViewDataSource {
         let item = lastLocations[indexPath.row]
         cell.configure(symbol: UIImage(systemName: item.iconName), title: item.lastLocationTitle, subtitle: item.lastLocationDate)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let selectedLocation = lastLocations[indexPath.row]
+        navigateToDetailView(with: selectedLocation)
     }
 }

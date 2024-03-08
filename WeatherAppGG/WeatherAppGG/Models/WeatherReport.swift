@@ -13,4 +13,5 @@ struct WeatherReport: Codable {
 
 struct Report: Codable {
     let forecast: Forecast
+    let conditions: CurrentCondition
 }

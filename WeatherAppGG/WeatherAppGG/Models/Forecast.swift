@@ -8,7 +8,7 @@
 import Foundation
 
 struct Forecast: Codable {
-    let conditions: [Condition]
+    let conditions: [Condition]?
     let text: String
     let ident: String
     let lat: Double
