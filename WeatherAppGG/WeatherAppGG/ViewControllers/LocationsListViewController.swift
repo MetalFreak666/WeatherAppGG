@@ -19,6 +19,9 @@ class LocationsListViewController: UIViewController, UITableViewDelegate {
     private let cellReuseIdentifier = "CustomLocationCell"
     private var lastLocations: [LastSearchLocation] = []
     
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var storiedLocation: [AirportLocation]?
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +40,8 @@ class LocationsListViewController: UIViewController, UITableViewDelegate {
             }
         }
         
-        lastLocations = viewModel.getLastLocations()
+        //lastLocations = viewModel.getLastLocations()
+        fetchLastAirportLocationsFromStorage()
     }
     
     // MARK: - Setup views and view layouts
@@ -110,13 +114,14 @@ extension LocationsListViewController {
 
 // MARK: - API
 extension LocationsListViewController {
-    private func fetchForecast(for aiportId: String) {
-        viewModel.getLocationForecast(airportId: aiportId) { forecastReport, error in
+    private func fetchForecast(for airportId: String) {
+        viewModel.getLocationForecast(airportId: airportId) { forecastReport, error in
             self.loadingIndicator.stopAnimating()
             
             if let error = error {
                 self.showFailedRequestAlert(errorMessage: error.localizedDescription)
             } else {
+                self.addAirportLocationsToStorage(airportId: airportId)
                 self.navigateToDetailView(with: forecastReport)
             }
         }
@@ -143,5 +148,66 @@ extension LocationsListViewController: UITableViewDataSource {
         #warning("DAORA: FIX ME")
         let selectedLocation = lastLocations[indexPath.row]
         navigateToDetailView(with: nil)
+    }
+    
+    #warning("DAORA: WIP")
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let action = UIContextualAction(style: .destructive, title: "Delete") { action, view, completionHandler in
+            let personToRemove = self.lastLocations[indexPath.row]
+            
+        }
+        return UISwipeActionsConfiguration(actions: [action])
+    }
+}
+
+// MARK: - CoreData
+extension LocationsListViewController {
+    func fetchLastAirportLocationsFromStorage() {
+        do {
+            self.storiedLocation = try context.fetch(AirportLocation.fetchRequest())
+            
+            if let lastStoriedLocations = self.storiedLocation {
+                for storiedLocation in lastStoriedLocations {
+                    let location: LastSearchLocation = .init(iconName: "airplane",
+                                                             lastLocationTitle: storiedLocation.airportCode ?? "No data provided",
+                                                             lastLocationDate: storiedLocation.lastFetchDate ?? "No data provided"
+                    )
+                    lastLocations.append(location)
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        } catch {
+            print("Could not fetch airport locations...")
+        }
+    }
+    
+    func addAirportLocationsToStorage(airportId: String) {
+        let newSearchLocation = AirportLocation(context: self.context)
+        newSearchLocation.airportCode = airportId
+        newSearchLocation.lastFetchDate = getTimestampt()
+        
+        do {
+            try self.context.save()
+        } catch {
+            print("Error with saving to the storage")
+        }
+    }
+    
+    func deleteAirportLocationFromTheStorage() {
+        //TODO: Not implemented yet
+    }
+}
+
+//MARK: - DateFormatter
+extension LocationsListViewController {
+    private func getTimestampt() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let dateString = dateFormatter.string(from: Date())
+        
+        return dateString
     }
 }

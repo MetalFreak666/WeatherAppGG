@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22757" systemVersion="23D60" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="AirportLocation" representedClassName="AirportLocation" syncable="YES">
+        <attribute name="airportCode" optional="YES" attributeType="String"/>
+        <attribute name="lastFetchDate" optional="YES" attributeType="String"/>
+        <relationship name="forecastReport" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ForecastWeatherReport"/>
+    </entity>
+    <entity name="ForecastWeatherReport" representedClassName="ForecastWeatherReport" syncable="YES">
+        <attribute name="dateIssued" optional="YES" attributeType="String"/>
+        <attribute name="elevationFt" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="ident" optional="YES" attributeType="String"/>
+        <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="text" optional="YES" attributeType="String"/>
+    </entity>
+</model>

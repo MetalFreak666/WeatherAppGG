@@ -35,10 +35,10 @@ struct Condition: Codable {
     }
     
     struct Visibility: Codable {
-        let prevailingVisDistanceQualifier: Int?
-        let distanceSm: Int
+        let prevailingVisDistanceQualifier: Double?
+        let distanceSm: Double?
         let distanceQualifier: Int?
-        let prevailingVisSm: Int
+        let prevailingVisSm: Double?
     }
     
     struct CloudLayer: Codable {

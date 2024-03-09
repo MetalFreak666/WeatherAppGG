@@ -36,6 +36,12 @@
 		7BEDC5182B9B82F0002219D9 /* CurrentDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC5172B9B82F0002219D9 /* CurrentDataModel.swift */; };
 		7BEDC51D2B9C86C2002219D9 /* ForecastScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC51C2B9C86C2002219D9 /* ForecastScrollView.swift */; };
 		7BEDC51F2B9C8F1C002219D9 /* ConditionLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC51E2B9C8F1C002219D9 /* ConditionLight.swift */; };
+		7BEDC5362B9CC602002219D9 /* WeatherAppDataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC5352B9CC602002219D9 /* WeatherAppDataStorage.swift */; };
+		7BEDC53C2B9CC750002219D9 /* AirportLocationDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC53A2B9CC750002219D9 /* AirportLocationDataModel.xcdatamodeld */; };
+		7BEDC5682B9CCB6C002219D9 /* AirportLocation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC5642B9CCB6C002219D9 /* AirportLocation+CoreDataClass.swift */; };
+		7BEDC5692B9CCB6C002219D9 /* AirportLocation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC5652B9CCB6C002219D9 /* AirportLocation+CoreDataProperties.swift */; };
+		7BEDC56A2B9CCB6C002219D9 /* ForecastWeatherReport+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC5662B9CCB6C002219D9 /* ForecastWeatherReport+CoreDataClass.swift */; };
+		7BEDC56B2B9CCB6C002219D9 /* ForecastWeatherReport+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC5672B9CCB6C002219D9 /* ForecastWeatherReport+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +70,12 @@
 		7BEDC5172B9B82F0002219D9 /* CurrentDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDataModel.swift; sourceTree = "<group>"; };
 		7BEDC51C2B9C86C2002219D9 /* ForecastScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastScrollView.swift; sourceTree = "<group>"; };
 		7BEDC51E2B9C8F1C002219D9 /* ConditionLight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionLight.swift; sourceTree = "<group>"; };
+		7BEDC5352B9CC602002219D9 /* WeatherAppDataStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherAppDataStorage.swift; sourceTree = "<group>"; };
+		7BEDC53B2B9CC750002219D9 /* AirportLocationDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AirportLocationDataModel.xcdatamodel; sourceTree = "<group>"; };
+		7BEDC5642B9CCB6C002219D9 /* AirportLocation+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AirportLocation+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7BEDC5652B9CCB6C002219D9 /* AirportLocation+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AirportLocation+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7BEDC5662B9CCB6C002219D9 /* ForecastWeatherReport+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ForecastWeatherReport+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7BEDC5672B9CCB6C002219D9 /* ForecastWeatherReport+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ForecastWeatherReport+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +114,7 @@
 		7B27C1EF2B98D530001A642C /* WeatherAppGG */ = {
 			isa = PBXGroup;
 			children = (
+				7BEDC5272B9CBCB1002219D9 /* DataStorage */,
 				7B27C2042B98D54D001A642C /* Views */,
 				7B27C2052B98D553001A642C /* ViewModels */,
 				7B27C2062B98D55E001A642C /* ViewControllers */,
@@ -113,6 +126,7 @@
 				7B27C1F92B98D531001A642C /* Assets.xcassets */,
 				7B27C1FB2B98D531001A642C /* LaunchScreen.storyboard */,
 				7B27C1FE2B98D531001A642C /* Info.plist */,
+				7BEDC53A2B9CC750002219D9 /* AirportLocationDataModel.xcdatamodeld */,
 			);
 			path = WeatherAppGG;
 			sourceTree = "<group>";
@@ -176,6 +190,18 @@
 				7B27C22C2B98D964001A642C /* AlamofireLogging.swift */,
 			);
 			path = SupportFiles;
+			sourceTree = "<group>";
+		};
+		7BEDC5272B9CBCB1002219D9 /* DataStorage */ = {
+			isa = PBXGroup;
+			children = (
+				7BEDC5642B9CCB6C002219D9 /* AirportLocation+CoreDataClass.swift */,
+				7BEDC5652B9CCB6C002219D9 /* AirportLocation+CoreDataProperties.swift */,
+				7BEDC5662B9CCB6C002219D9 /* ForecastWeatherReport+CoreDataClass.swift */,
+				7BEDC5672B9CCB6C002219D9 /* ForecastWeatherReport+CoreDataProperties.swift */,
+				7BEDC5352B9CC602002219D9 /* WeatherAppDataStorage.swift */,
+			);
+			path = DataStorage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -274,14 +300,20 @@
 				7B27C22D2B98D964001A642C /* AlamofireLogging.swift in Sources */,
 				7B27C2262B98D8C8001A642C /* Forecast.swift in Sources */,
 				7BEDC51D2B9C86C2002219D9 /* ForecastScrollView.swift in Sources */,
+				7BEDC53C2B9CC750002219D9 /* AirportLocationDataModel.xcdatamodeld in Sources */,
 				7B27C22F2B98F5A4001A642C /* LocationTableViewCell.swift in Sources */,
 				7BEDC5102B9B3405002219D9 /* WeatherDetailLabel.swift in Sources */,
+				7BEDC5362B9CC602002219D9 /* WeatherAppDataStorage.swift in Sources */,
 				7B27C1F32B98D531001A642C /* SceneDelegate.swift in Sources */,
 				7BEDC51F2B9C8F1C002219D9 /* ConditionLight.swift in Sources */,
 				7B27C2202B98D85F001A642C /* WeatherForecastHTTPClient.swift in Sources */,
 				7B27C2222B98D86E001A642C /* AlamofireWeatherForecastHTTPClient.swift in Sources */,
 				7B27C21B2B98D7EE001A642C /* LocationsViewModel.swift in Sources */,
 				7B27C2282B98D8ED001A642C /* Condition.swift in Sources */,
+				7BEDC5682B9CCB6C002219D9 /* AirportLocation+CoreDataClass.swift in Sources */,
+				7BEDC5692B9CCB6C002219D9 /* AirportLocation+CoreDataProperties.swift in Sources */,
+				7BEDC56A2B9CCB6C002219D9 /* ForecastWeatherReport+CoreDataClass.swift in Sources */,
+				7BEDC56B2B9CCB6C002219D9 /* ForecastWeatherReport+CoreDataProperties.swift in Sources */,
 				7BEDC50E2B9B33ED002219D9 /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -563,6 +595,20 @@
 			productName = SwiftyJSON;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		7BEDC53A2B9CC750002219D9 /* AirportLocationDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				7BEDC53B2B9CC750002219D9 /* AirportLocationDataModel.xcdatamodel */,
+			);
+			currentVersion = 7BEDC53B2B9CC750002219D9 /* AirportLocationDataModel.xcdatamodel */;
+			name = AirportLocationDataModel.xcdatamodeld;
+			path = /Users/dariuszorasinski/Desktop/GG/Frontend/WeatherGG/WeatherGG/WeatherAppGG/WeatherAppGG/WeatherAppGG/AirportLocationDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 7B27C1E52B98D530001A642C /* Project object */;
 }

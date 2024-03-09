@@ -90,7 +90,7 @@ class DetailViewController: UIViewController {
     private func configureCurrentDetailStackView() {
         guard let currentReport = viewModel?.weatherReport?.report.conditions else { return }
         
-        let labelConfigurations: [(symbolName: String, title: String, text: String)] = [
+        let labelConfig: [(symbolName: String, title: String, text: String)] = [
             ("thermometer.low", "Temperature :", String(currentReport.tempC)),
             ("tirepressure", "Pressure HG :", String(currentReport.pressureHg)),
             ("tirepressure", "Pressure HPA :", String(currentReport.pressureHpa)),
@@ -98,7 +98,7 @@ class DetailViewController: UIViewController {
             ("info.circle", "Info :", currentReport.text)
         ]
         
-        for config in labelConfigurations {
+        for config in labelConfig {
             let label = WeatherDetailLabel()
             label.configure(symbolName: config.symbolName, title: config.title, text: config.text)
             detailStackView.addArrangedSubview(label)
@@ -106,7 +106,23 @@ class DetailViewController: UIViewController {
     }
     
     private func configureForecastDetailStackView() {
+        guard let forecastReport = viewModel?.weatherReport?.report.forecast else { return }
         
+        let labelConfig: [(symbolName: String, title: String, text: String)] = [
+            ("info.circle", "Identity : ", forecastReport.ident),
+            ("mappin", "Latitude : ", String(forecastReport.lat)),
+            ("mappin", "Longitude : ", String(forecastReport.lon)),
+            ("quotelevel", "Elevation FT : ", String(forecastReport.elevationFt)),
+            ("calendar.circle", "Start Date : ", String(forecastReport.period.dateStart)),
+            ("calendar.circle", "End Date : ", String(forecastReport.period.dateEnd)),
+            ("info.circle", "Info : ", String(forecastReport.text)),
+        ]
+        
+        for config in labelConfig {
+            let label = WeatherDetailLabel()
+            label.configure(symbolName: config.symbolName, title: config.title, text: config.text)
+            detailStackView.addArrangedSubview(label)
+        }
     }
 }
 
