@@ -17,7 +17,6 @@ class LocationSubmitView: UIView {
         textField.borderStyle = .roundedRect
         textField.clearButtonMode = .always
         textField.translatesAutoresizingMaskIntoConstraints = false
-        
         return textField
     }()
     
@@ -32,7 +31,6 @@ class LocationSubmitView: UIView {
         let button = UIButton(configuration: config)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(didTapSearchButton), for: .touchDown)
-        
         return button
     }()
     
@@ -41,7 +39,6 @@ class LocationSubmitView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.axis = .vertical
         view.spacing = 18
-        
         return view
     }()
     

@@ -1,5 +1,5 @@
 //
-//  LocationDetailView.swift
+//  LocationForecastDetailView.swift
 //  WeatherAppGG
 //
 //  Created by Dariusz Orasinski on 08/03/2024.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class LocationConditionLabel: UIView {
+class ForecastConditionView: UIView {
     
     // MARK: Properties
     private let iconImageView: UIImageView = {
@@ -21,18 +21,25 @@ class LocationConditionLabel: UIView {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         label.numberOfLines = 1
+        label.tintColor = .gray
         return label
     }()
     
     private let textLabel: UILabel = {
-        let label = UILabel()
+       let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         label.numberOfLines = 1
-        label.textColor = .gray
         return label
     }()
     
-    // MARK: - Init
+    private let forecastStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        return stackView
+    }()
+
+    // MARK: Init
     override init(frame: CGRect) {
         super.init(frame: .zero)
         
@@ -44,14 +51,9 @@ class LocationConditionLabel: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Setup views and view layouts
     private func setupView() {
         self.backgroundColor = .white
         self.translatesAutoresizingMaskIntoConstraints = false
-        
-        addSubview(iconImageView)
-        addSubview(titleLabel)
-        addSubview(textLabel)
     }
     
     private func setupLayoutConstraints() {
@@ -60,24 +62,22 @@ class LocationConditionLabel: UIView {
             make.size.equalTo(CGSize(width: 30, height: 30))
         }
         
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.equalTo(iconImageView.snp.trailing).offset(18)
-            make.trailing.equalToSuperview()
-        }
-        
-        textLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(18)
-            make.leading.trailing.bottom.equalToSuperview()
-        }
+        /*
+        NSLayoutConstraint.activate([
+            forecastStackView.topAnchor.constraint(equalTo: topAnchor),
+            forecastStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            forecastStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            forecastStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])*/
     }
-}
-
-// MARK: - Label config
-extension LocationConditionLabel {
-    func configure(symbolName: String, title: String, text: String) {
-        iconImageView.image = UIImage(systemName: symbolName)
-        titleLabel.text = title
-        textLabel.text = text
+    
+    func configure(condition: Condition?) {
+        //guard let condition = condition else { return }
+        iconImageView.image = UIImage(systemName: "sun.min.fill")
+        titleLabel.text = "Wind"
+        textLabel.text = "Strong"
+        
+        
+        
     }
 }

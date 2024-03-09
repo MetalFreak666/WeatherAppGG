@@ -14,7 +14,6 @@ class LocationTableViewCell: UITableViewCell {
     private let iconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        
         return imageView
     }()
     

@@ -29,11 +29,13 @@
 		7B27C22F2B98F5A4001A642C /* LocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B27C22E2B98F5A4001A642C /* LocationTableViewCell.swift */; };
 		7B27C2312B98F7C5001A642C /* LastSearchLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B27C2302B98F7C5001A642C /* LastSearchLocation.swift */; };
 		7BEDC50E2B9B33ED002219D9 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC50D2B9B33ED002219D9 /* DetailViewController.swift */; };
-		7BEDC5102B9B3405002219D9 /* LocationConditionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC50F2B9B3405002219D9 /* LocationConditionLabel.swift */; };
-		7BEDC5122B9B3A68002219D9 /* ForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC5112B9B3A68002219D9 /* ForecastView.swift */; };
+		7BEDC5102B9B3405002219D9 /* WeatherDetailLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC50F2B9B3405002219D9 /* WeatherDetailLabel.swift */; };
+		7BEDC5122B9B3A68002219D9 /* ForecastConditionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC5112B9B3A68002219D9 /* ForecastConditionView.swift */; };
 		7BEDC5142B9B41A8002219D9 /* LocationDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC5132B9B41A8002219D9 /* LocationDetailViewModel.swift */; };
 		7BEDC5162B9B4586002219D9 /* CurrentCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC5152B9B4586002219D9 /* CurrentCondition.swift */; };
 		7BEDC5182B9B82F0002219D9 /* CurrentDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC5172B9B82F0002219D9 /* CurrentDataModel.swift */; };
+		7BEDC51D2B9C86C2002219D9 /* ForecastScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC51C2B9C86C2002219D9 /* ForecastScrollView.swift */; };
+		7BEDC51F2B9C8F1C002219D9 /* ConditionLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEDC51E2B9C8F1C002219D9 /* ConditionLight.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,11 +57,13 @@
 		7B27C22E2B98F5A4001A642C /* LocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTableViewCell.swift; sourceTree = "<group>"; };
 		7B27C2302B98F7C5001A642C /* LastSearchLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastSearchLocation.swift; sourceTree = "<group>"; };
 		7BEDC50D2B9B33ED002219D9 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
-		7BEDC50F2B9B3405002219D9 /* LocationConditionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationConditionLabel.swift; sourceTree = "<group>"; };
-		7BEDC5112B9B3A68002219D9 /* ForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastView.swift; sourceTree = "<group>"; };
+		7BEDC50F2B9B3405002219D9 /* WeatherDetailLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailLabel.swift; sourceTree = "<group>"; };
+		7BEDC5112B9B3A68002219D9 /* ForecastConditionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastConditionView.swift; sourceTree = "<group>"; };
 		7BEDC5132B9B41A8002219D9 /* LocationDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailViewModel.swift; sourceTree = "<group>"; };
 		7BEDC5152B9B4586002219D9 /* CurrentCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentCondition.swift; sourceTree = "<group>"; };
 		7BEDC5172B9B82F0002219D9 /* CurrentDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDataModel.swift; sourceTree = "<group>"; };
+		7BEDC51C2B9C86C2002219D9 /* ForecastScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastScrollView.swift; sourceTree = "<group>"; };
+		7BEDC51E2B9C8F1C002219D9 /* ConditionLight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionLight.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,8 +122,9 @@
 			children = (
 				7B27C21C2B98D809001A642C /* LocationsSubmitView.swift */,
 				7B27C22E2B98F5A4001A642C /* LocationTableViewCell.swift */,
-				7BEDC50F2B9B3405002219D9 /* LocationConditionLabel.swift */,
-				7BEDC5112B9B3A68002219D9 /* ForecastView.swift */,
+				7BEDC50F2B9B3405002219D9 /* WeatherDetailLabel.swift */,
+				7BEDC5112B9B3A68002219D9 /* ForecastConditionView.swift */,
+				7BEDC51C2B9C86C2002219D9 /* ForecastScrollView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -160,6 +165,7 @@
 				7BEDC5152B9B4586002219D9 /* CurrentCondition.swift */,
 				7B27C2302B98F7C5001A642C /* LastSearchLocation.swift */,
 				7BEDC5172B9B82F0002219D9 /* CurrentDataModel.swift */,
+				7BEDC51E2B9C8F1C002219D9 /* ConditionLight.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -261,15 +267,17 @@
 				7B27C2192B98D743001A642C /* LocationsListViewController.swift in Sources */,
 				7B27C21D2B98D809001A642C /* LocationsSubmitView.swift in Sources */,
 				7BEDC5162B9B4586002219D9 /* CurrentCondition.swift in Sources */,
-				7BEDC5122B9B3A68002219D9 /* ForecastView.swift in Sources */,
+				7BEDC5122B9B3A68002219D9 /* ForecastConditionView.swift in Sources */,
 				7B27C2312B98F7C5001A642C /* LastSearchLocation.swift in Sources */,
 				7B27C2242B98D8B1001A642C /* WeatherReport.swift in Sources */,
 				7B27C1F12B98D530001A642C /* AppDelegate.swift in Sources */,
 				7B27C22D2B98D964001A642C /* AlamofireLogging.swift in Sources */,
 				7B27C2262B98D8C8001A642C /* Forecast.swift in Sources */,
+				7BEDC51D2B9C86C2002219D9 /* ForecastScrollView.swift in Sources */,
 				7B27C22F2B98F5A4001A642C /* LocationTableViewCell.swift in Sources */,
-				7BEDC5102B9B3405002219D9 /* LocationConditionLabel.swift in Sources */,
+				7BEDC5102B9B3405002219D9 /* WeatherDetailLabel.swift in Sources */,
 				7B27C1F32B98D531001A642C /* SceneDelegate.swift in Sources */,
+				7BEDC51F2B9C8F1C002219D9 /* ConditionLight.swift in Sources */,
 				7B27C2202B98D85F001A642C /* WeatherForecastHTTPClient.swift in Sources */,
 				7B27C2222B98D86E001A642C /* AlamofireWeatherForecastHTTPClient.swift in Sources */,
 				7B27C21B2B98D7EE001A642C /* LocationsViewModel.swift in Sources */,
