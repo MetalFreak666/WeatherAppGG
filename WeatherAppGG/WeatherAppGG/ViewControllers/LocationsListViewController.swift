@@ -13,6 +13,7 @@ class LocationsListViewController: UIViewController, UITableViewDelegate {
     // MARK: - Properties
     private let submitView = LocationSubmitView()
     private let viewModel = LocationsViewModel()
+    private let loadingIndicator = UIActivityIndicatorView(style: .large)
     
     private let tableView = UITableView()
     private let cellReuseIdentifier = "CustomLocationCell"
@@ -26,8 +27,10 @@ class LocationsListViewController: UIViewController, UITableViewDelegate {
         setupView()
         setupLayoutConstraints()
         setupTableView()
+        loadingIndicator.startAnimating()
         submitView.submitAction = { locationText in
             if let location = locationText, !location.isEmpty {
+                self.loadingIndicator.startAnimating()
                 self.fetchForecast(for: location)
             } else {
                 self.showEmptyLocationAlert()
@@ -42,6 +45,7 @@ class LocationsListViewController: UIViewController, UITableViewDelegate {
         self.view.backgroundColor = .white
         self.view.addSubview(submitView)
         self.view.addSubview(tableView)
+        self.view.addSubview(loadingIndicator)
     }
     
     private func setupTableView() {
@@ -53,6 +57,8 @@ class LocationsListViewController: UIViewController, UITableViewDelegate {
     }
     
     private func setupLayoutConstraints() {
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
         tableView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(18)
             make.bottom.equalTo(submitView.snp.top).offset(-18)
@@ -65,11 +71,21 @@ class LocationsListViewController: UIViewController, UITableViewDelegate {
             make.trailing.equalToSuperview()
             make.bottom.equalToSuperview().offset(-60)
         }
+        
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
+        view.bringSubviewToFront(loadingIndicator)
     }
     
     // MARK: - Navigation
-    private func navigateToDetailView(with selectedItem: LastSearchLocation) {
+    private func navigateToDetailView(with selectedItem: WeatherReport?) {
         let detailVC = DetailViewController()
+        let viewModel = LocationDetailViewModel()
+        viewModel.weatherReport = selectedItem
+        detailVC.viewModel = viewModel
         
         navigationController?.pushViewController(detailVC, animated: true)
     }
@@ -96,10 +112,12 @@ extension LocationsListViewController {
 extension LocationsListViewController {
     private func fetchForecast(for aiportId: String) {
         viewModel.getLocationForecast(airportId: aiportId) { forecastReport, error in
+            self.loadingIndicator.stopAnimating()
+            
             if let error = error {
                 self.showFailedRequestAlert(errorMessage: error.localizedDescription)
             } else {
-                //TODO: Update view
+                self.navigateToDetailView(with: forecastReport)
             }
         }
     }
@@ -122,7 +140,8 @@ extension LocationsListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
+        #warning("DAORA: FIX ME")
         let selectedLocation = lastLocations[indexPath.row]
-        navigateToDetailView(with: selectedLocation)
+        navigateToDetailView(with: nil)
     }
 }

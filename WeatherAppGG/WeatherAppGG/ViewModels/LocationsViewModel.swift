@@ -14,6 +14,10 @@ class LocationsViewModel {
     
     private let httpClient = AlamofireWeatherForecastHTTPClient()
     
+    init() {
+        
+    }
+    
     // MARK: - Actions
     func getLocationForecast(airportId: String, completion: @escaping ForecastCompletion) {
         httpClient.getWeatherForecast(aiportId: airportId) { report, error in
@@ -21,14 +25,11 @@ class LocationsViewModel {
                 //TODO: Do something with the failed request
                 completion(nil, error)
             } else {
-                //TODO: Do something with the forecast report
-                guard let report = report else {
-                    return
+                if let forecastReport = report {
+                    completion(forecastReport, nil)
+                } else {
+                    completion(nil, nil)
                 }
-                
-                let forecastReport: WeatherReport = report
-                //print(forecastReport.report.forecast.conditions.count)
-                completion(nil, nil)
             }
         }
     }

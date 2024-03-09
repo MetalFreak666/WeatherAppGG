@@ -48,7 +48,7 @@ struct CurrentCondition: Codable {
     }
     
     struct Wind: Codable {
-        let speedKts: Int?
+        let speedKts: Double?
         let from: Int?
         let direction: Int?
         let variable: Bool?

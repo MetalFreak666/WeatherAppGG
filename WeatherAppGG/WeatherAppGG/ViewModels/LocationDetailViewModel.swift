@@ -7,3 +7,14 @@
 
 import Foundation
 
+class LocationDetailViewModel {
+    
+    // MARK: - Properties
+    var weatherReport: WeatherReport?
+    
+    init(weatherReport: WeatherReport? = nil) {
+        self.weatherReport = weatherReport
+    }
+    
+}
+
