@@ -14,13 +14,11 @@ class LocationsListViewController: UIViewController, UITableViewDelegate {
     private let submitView = LocationSubmitView()
     private let viewModel = LocationsViewModel()
     private let loadingIndicator = UIActivityIndicatorView(style: .large)
-    
     private let tableView = UITableView()
     private let cellReuseIdentifier = "CustomLocationCell"
-    private var lastLocations: [LastSearchLocation] = []
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var storiedLocation: [AirportLocation]?
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    private var storiedAirportLocations: [AirportLocation] = []
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -39,9 +37,12 @@ class LocationsListViewController: UIViewController, UITableViewDelegate {
                 self.showEmptyLocationAlert()
             }
         }
-        
-        //lastLocations = viewModel.getLastLocations()
         fetchLastAirportLocationsFromStorage()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.reloadData()
     }
     
     // MARK: - Setup views and view layouts
@@ -53,11 +54,11 @@ class LocationsListViewController: UIViewController, UITableViewDelegate {
     }
     
     private func setupTableView() {
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(LocationTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
-        view.addSubview(tableView)
-        tableView.frame = view.bounds
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+        self.tableView.register(LocationTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        self.view.addSubview(tableView)
+        self.tableView.frame = view.bounds
     }
     
     private func setupLayoutConstraints() {
@@ -85,10 +86,20 @@ class LocationsListViewController: UIViewController, UITableViewDelegate {
     }
     
     // MARK: - Navigation
-    private func navigateToDetailView(with selectedItem: WeatherReport?) {
+    private func navigateToDetailView(with weatherReport: WeatherReport?) {
         let detailVC = DetailViewController()
         let viewModel = LocationDetailViewModel()
-        viewModel.weatherReport = selectedItem
+        viewModel.weatherReport = weatherReport
+        detailVC.viewModel = viewModel
+        
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
+    private func navigateToDetailViewWithLocation(with selectedLocation: AirportLocation) {
+        let detailVC = DetailViewController()
+        let viewModel = LocationDetailViewModel()
+        viewModel.storiedCurrentWeatherReport = selectedLocation.currentReport
+        viewModel.storiedForecastReport = selectedLocation.forecastReport
         detailVC.viewModel = viewModel
         
         navigationController?.pushViewController(detailVC, animated: true)
@@ -110,19 +121,29 @@ extension LocationsListViewController {
         
         present(alert, animated: true)
     }
+    
+    private func showFailedRequestToStorageAlert(errorMessage: String) {
+        let alert = UIAlertController(title: "Something went wrong!", message: errorMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        present(alert, animated: true)
+    }
 }
 
 // MARK: - API
 extension LocationsListViewController {
     private func fetchForecast(for airportId: String) {
-        viewModel.getLocationForecast(airportId: airportId) { forecastReport, error in
+        viewModel.getLocationForecast(airportId: airportId) { weatherReport, error in
             self.loadingIndicator.stopAnimating()
             
             if let error = error {
                 self.showFailedRequestAlert(errorMessage: error.localizedDescription)
             } else {
-                self.addAirportLocationsToStorage(airportId: airportId)
-                self.navigateToDetailView(with: forecastReport)
+                if let report = weatherReport {
+                    self.addAirportWeatherReportToStorage(airportId: airportId, weatherReport: report)
+                }
+                
+                self.navigateToDetailView(with: weatherReport)
             }
         }
     }
@@ -132,55 +153,112 @@ extension LocationsListViewController {
 extension LocationsListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return lastLocations.count
+        return storiedAirportLocations.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! LocationTableViewCell
-        let item = lastLocations[indexPath.row]
-        cell.configure(symbol: UIImage(systemName: item.iconName), title: item.lastLocationTitle, subtitle: item.lastLocationDate)
+        let item = storiedAirportLocations[indexPath.row]
+        cell.configure(symbol: UIImage(systemName: "airplane"), title: item.airportCode, subtitle: item.lastFetchDate)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        #warning("DAORA: FIX ME")
-        let selectedLocation = lastLocations[indexPath.row]
-        navigateToDetailView(with: nil)
+        let selectedLocation = storiedAirportLocations[indexPath.row]
+        navigateToDetailViewWithLocation(with: selectedLocation)
     }
     
-    #warning("DAORA: WIP")
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction(style: .destructive, title: "Delete") { action, view, completionHandler in
-            let personToRemove = self.lastLocations[indexPath.row]
+            let locationToRemove = self.storiedAirportLocations[indexPath.row]
+            self.context.delete(locationToRemove)
             
+            do {
+                try self.context.save()
+            } catch {
+                self.showFailedRequestToStorageAlert(errorMessage: "Could not remove location from the storage!")
+            }
+            self.tableView.reloadData()
         }
         return UISwipeActionsConfiguration(actions: [action])
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = .white
+        
+        let label = UILabel(frame: CGRect(x: 15, y: 5, width: tableView.bounds.width - 30, height: 40))
+        label.text = "Last fetched locations"
+        label.textColor = .black
+        headerView.addSubview(label)
+        
+        return headerView
     }
 }
 
 // MARK: - CoreData
+#warning("DAORA: Fix me")
 extension LocationsListViewController {
     func fetchLastAirportLocationsFromStorage() {
+        let initAirportLocations: [String] = ["KAUS", "KPWM"]
         do {
-            self.storiedLocation = try context.fetch(AirportLocation.fetchRequest())
+            self.storiedAirportLocations = try context.fetch(AirportLocation.fetchRequest())
             
-            if let lastStoriedLocations = self.storiedLocation {
-                for storiedLocation in lastStoriedLocations {
-                    let location: LastSearchLocation = .init(iconName: "airplane",
-                                                             lastLocationTitle: storiedLocation.airportCode ?? "No data provided",
-                                                             lastLocationDate: storiedLocation.lastFetchDate ?? "No data provided"
-                    )
-                    lastLocations.append(location)
+            /*
+            for airportLocation in self.storiedLocation {
+                let aiportCode = airportLocation.airportCode
+                let forecastReport = airportLocation.forecastReport
+                let currentReport = airportLocation.currentReport
+                
+                if let forecastRep = forecastReport {
+                    print("Forecast Report \(forecastRep.lat)")
+                }
+            }*/
+            
+            if storiedAirportLocations.isEmpty {
+                for airport in initAirportLocations {
+                    viewModel.getLocationForecast(airportId: airport) { weatherReport, error in
+                        if let error {
+                            self.showFailedRequestAlert(errorMessage: error.localizedDescription)
+                        } else {
+                            guard let report = weatherReport else { return }
+                            
+                            self.addAirportWeatherReportToStorage(airportId: airport, weatherReport: report)
+                            //var airportLocation = AirportLocation()
+                            //airportLocation.airportCode = airport
+                            //airportLocation.forecastReport = weatherReport?.report.forecast
+                            
+                            //self.addAirportLocationsToStorage(airportId: airport)
+                            self.tableView.reloadData()
+                        }
+                    }
                 }
             }
+            
+            
+            
+            
+            
+            
+            /*
+            for storiedLocation in self.storiedLocation {
+                let location: LastSearchLocation = .init(iconName: "airplane",
+                                                         lastLocationTitle: storiedLocation.airportCode,
+                                                         lastLocationDate: storiedLocation.lastFetchDate ?? "No data provided"
+                )
+                //lastLocations.append(location)
+            }*/
             
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
         } catch {
-            print("Could not fetch airport locations...")
+            self.showFailedRequestToStorageAlert(errorMessage: "Could not fetch airport locations...")
         }
     }
     
@@ -192,13 +270,30 @@ extension LocationsListViewController {
         do {
             try self.context.save()
         } catch {
-            print("Error with saving to the storage")
+            self.showFailedRequestToStorageAlert(errorMessage: "Could not save to the storage!")
         }
     }
     
-    func deleteAirportLocationFromTheStorage() {
-        //TODO: Not implemented yet
+    func addAirportWeatherReportToStorage(airportId: String, weatherReport: WeatherReport) {
+        let newSearchLocation = AirportLocation(context: self.context)
+        newSearchLocation.airportCode = airportId
+        newSearchLocation.lastFetchDate = getTimestampt()
+        
+        let forecastReport = ForecastWeatherReport(context: self.context)
+        forecastReport.ident = weatherReport.report.forecast.ident
+        forecastReport.dateIssued = weatherReport.report.forecast.dateIssued
+        forecastReport.lat = weatherReport.report.forecast.lat
+        forecastReport.lon = weatherReport.report.forecast.lon
+        
+        newSearchLocation.forecastReport = forecastReport
+        
+        do {
+            try self.context.save()
+        } catch {
+            self.showFailedRequestToStorageAlert(errorMessage: "Could not save to the storage!")
+        }
     }
+    
 }
 
 //MARK: - DateFormatter

@@ -2,7 +2,7 @@
 //  ForecastWeatherReport+CoreDataClass.swift
 //  WeatherAppGG
 //
-//  Created by Dariusz Orasinski on 09/03/2024.
+//  Created by Dariusz Orasinski on 10/03/2024.
 //
 //
 

@@ -1,5 +1,5 @@
 //
-//  AirportLocation+CoreDataClass.swift
+//  ForecastPeriod+CoreDataClass.swift
 //  WeatherAppGG
 //
 //  Created by Dariusz Orasinski on 10/03/2024.
@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-@objc(AirportLocation)
-public class AirportLocation: NSManagedObject {
+@objc(ForecastPeriod)
+public class ForecastPeriod: NSManagedObject {
 
 }

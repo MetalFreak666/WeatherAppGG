@@ -13,8 +13,6 @@ class LocationsViewModel {
     typealias ForecastCompletion = (WeatherReport?, Error?) -> Void
     
     private let httpClient = AlamofireWeatherForecastHTTPClient()
-    private let dataStorage = WeatherAppDataStorage()
-    
     
     init() {
         
@@ -54,4 +52,5 @@ class LocationsViewModel {
         return lastFetchedLocations
 
     }
+    
 }

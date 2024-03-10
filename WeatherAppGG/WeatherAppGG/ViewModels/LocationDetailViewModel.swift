@@ -11,10 +11,15 @@ class LocationDetailViewModel {
     
     // MARK: - Properties
     var weatherReport: WeatherReport?
+    var storiedForecastReport: ForecastWeatherReport?
+    var storiedCurrentWeatherReport: CurrentWeatherReport?
     var forecastConditionsLight: [ConditionLight] = []
     
-    init(weatherReport: WeatherReport? = nil) {
+    // MARK: - Init
+    init(weatherReport: WeatherReport? = nil, storiedForecastReport: ForecastWeatherReport? = nil, storiedCurrentWeatherReport: CurrentWeatherReport? = nil) {
         self.weatherReport = weatherReport
+        self.storiedForecastReport = storiedForecastReport
+        self.storiedCurrentWeatherReport = storiedCurrentWeatherReport
     }
     
     func initForecastConditions() -> [ConditionLight] {

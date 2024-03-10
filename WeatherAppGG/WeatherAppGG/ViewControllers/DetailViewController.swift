@@ -105,23 +105,41 @@ class DetailViewController: UIViewController {
         }
     }
     
+    #warning("DAORA: Clean me pls")
     private func configureForecastDetailStackView() {
-        guard let forecastReport = viewModel?.weatherReport?.report.forecast else { return }
-        
-        let labelConfig: [(symbolName: String, title: String, text: String)] = [
-            ("info.circle", "Identity : ", forecastReport.ident),
-            ("mappin", "Latitude : ", String(forecastReport.lat)),
-            ("mappin", "Longitude : ", String(forecastReport.lon)),
-            ("quotelevel", "Elevation FT : ", String(forecastReport.elevationFt)),
-            ("calendar.circle", "Start Date : ", String(forecastReport.period.dateStart)),
-            ("calendar.circle", "End Date : ", String(forecastReport.period.dateEnd)),
-            ("info.circle", "Info : ", String(forecastReport.text)),
-        ]
-        
-        for config in labelConfig {
-            let label = WeatherDetailLabel()
-            label.configure(symbolName: config.symbolName, title: config.title, text: config.text)
-            detailStackView.addArrangedSubview(label)
+        if let storiedForecastReport = viewModel?.storiedForecastReport {
+            let labelConfig: [(symbolName: String, title: String, text: String)] = [
+                ("info.circle", "Identity : ", storiedForecastReport.ident ?? "No data provided"),
+                ("mappin", "Latitude : ", String(storiedForecastReport.lat)),
+                ("mappin", "Longitude : ", String(storiedForecastReport.lon)),
+                ("quotelevel", "Elevation FT : ", String(storiedForecastReport.elevationFt)),
+                ("calendar.circle", "Start Date : ", String(storiedForecastReport.period?.dateStart ?? "No data provided")),
+                ("calendar.circle", "End Date : ", String(storiedForecastReport.period?.dateEnd ?? "No data provided")),
+                ("info.circle", "Info : ", String(storiedForecastReport.text ?? "No data provided")),
+            ]
+            
+            for config in labelConfig {
+                let label = WeatherDetailLabel()
+                label.configure(symbolName: config.symbolName, title: config.title, text: config.text)
+                detailStackView.addArrangedSubview(label)
+            }
+        } else {
+            guard let forecastReport = viewModel?.weatherReport?.report.forecast else { return }
+            let labelConfig: [(symbolName: String, title: String, text: String)] = [
+                ("info.circle", "Identity : ", forecastReport.ident),
+                ("mappin", "Latitude : ", String(forecastReport.lat)),
+                ("mappin", "Longitude : ", String(forecastReport.lon)),
+                ("quotelevel", "Elevation FT : ", String(forecastReport.elevationFt)),
+                ("calendar.circle", "Start Date : ", String(forecastReport.period.dateStart)),
+                ("calendar.circle", "End Date : ", String(forecastReport.period.dateEnd)),
+                ("info.circle", "Info : ", String(forecastReport.text)),
+            ]
+            
+            for config in labelConfig {
+                let label = WeatherDetailLabel()
+                label.configure(symbolName: config.symbolName, title: config.title, text: config.text)
+                detailStackView.addArrangedSubview(label)
+            }
         }
     }
 }
