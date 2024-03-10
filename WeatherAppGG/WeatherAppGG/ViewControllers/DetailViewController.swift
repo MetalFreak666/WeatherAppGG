@@ -36,7 +36,7 @@ class DetailViewController: UIViewController {
     var viewModel: LocationDetailViewModel?
     var weatherReport: WeatherReport?
 
-
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Conditions"
@@ -46,6 +46,7 @@ class DetailViewController: UIViewController {
         configureCurrentDetailStackView()
     }
     
+    // MARK: - Setup views and view layouts
     private func setupView() {
         self.view.backgroundColor = .white
         self.view.addSubview(segmentedControl)
@@ -88,77 +89,27 @@ class DetailViewController: UIViewController {
     }
     
     private func configureCurrentDetailStackView() {
-        if let storiedCurrentWeatherReport = viewModel?.storiedCurrentWeatherReport {
-            let labelConfig: [(symbolName: String, title: String, text: String)] = [
-                ("thermometer.low", "Temperature :", String(storiedCurrentWeatherReport.tempC)),
-                ("tirepressure", "Pressure HG :", String(storiedCurrentWeatherReport.pressureHg)),
-                ("tirepressure", "Pressure HPA :", String(storiedCurrentWeatherReport.pressureHpa)),
-                ("humidity.fill", "Humidity :", String(storiedCurrentWeatherReport.relativeHumidity)),
-                ("info.circle", "Info :", storiedCurrentWeatherReport.text ?? "No data provided")
-            ]
-            
-            for config in labelConfig {
-                let label = WeatherDetailLabel()
-                label.configure(symbolName: config.symbolName, title: config.title, text: config.text)
-                detailStackView.addArrangedSubview(label)
-            }
-        } else {
-            guard let currentReport = viewModel?.weatherReport?.report.conditions else { return }
-            
-            let labelConfig: [(symbolName: String, title: String, text: String)] = [
-                ("thermometer.low", "Temperature :", String(currentReport.tempC)),
-                ("tirepressure", "Pressure HG :", String(currentReport.pressureHg)),
-                ("tirepressure", "Pressure HPA :", String(currentReport.pressureHpa)),
-                ("humidity.fill", "Humidity :", String(currentReport.relativeHumidity)),
-                ("info.circle", "Info :", currentReport.text)
-            ]
-            
-            for config in labelConfig {
-                let label = WeatherDetailLabel()
-                label.configure(symbolName: config.symbolName, title: config.title, text: config.text)
-                detailStackView.addArrangedSubview(label)
-            }
+        let labelConfigurations = viewModel?.weatherDetailLabelConfigurations() ?? []
+        
+        for config in labelConfigurations {
+            let label = WeatherDetailLabel()
+            label.configure(symbolName: config.symbolName, title: config.title, text: config.text)
+            detailStackView.addArrangedSubview(label)
         }
     }
     
     private func configureForecastDetailStackView() {
-        if let storiedForecastReport = viewModel?.storiedForecastReport {
-            let labelConfig: [(symbolName: String, title: String, text: String)] = [
-                ("info.circle", "Identity : ", storiedForecastReport.ident ?? "No data provided"),
-                ("mappin", "Latitude : ", String(storiedForecastReport.lat)),
-                ("mappin", "Longitude : ", String(storiedForecastReport.lon)),
-                ("quotelevel", "Elevation FT : ", String(storiedForecastReport.elevationFt)),
-                ("calendar.circle", "Start Date : ", String(storiedForecastReport.period?.dateStart ?? "No data provided")),
-                ("calendar.circle", "End Date : ", String(storiedForecastReport.period?.dateEnd ?? "No data provided")),
-                ("info.circle", "Info : ", String(storiedForecastReport.text ?? "No data provided")),
-            ]
-            
-            for config in labelConfig {
-                let label = WeatherDetailLabel()
-                label.configure(symbolName: config.symbolName, title: config.title, text: config.text)
-                detailStackView.addArrangedSubview(label)
-            }
-        } else {
-            guard let forecastReport = viewModel?.weatherReport?.report.forecast else { return }
-            let labelConfig: [(symbolName: String, title: String, text: String)] = [
-                ("info.circle", "Identity : ", forecastReport.ident),
-                ("mappin", "Latitude : ", String(forecastReport.lat)),
-                ("mappin", "Longitude : ", String(forecastReport.lon)),
-                ("quotelevel", "Elevation FT : ", String(forecastReport.elevationFt)),
-                ("calendar.circle", "Start Date : ", String(forecastReport.period.dateStart)),
-                ("calendar.circle", "End Date : ", String(forecastReport.period.dateEnd)),
-                ("info.circle", "Info : ", String(forecastReport.text)),
-            ]
-            
-            for config in labelConfig {
-                let label = WeatherDetailLabel()
-                label.configure(symbolName: config.symbolName, title: config.title, text: config.text)
-                detailStackView.addArrangedSubview(label)
-            }
+        let labelConfigurations = viewModel?.forecastDetailLabelConfigurations() ?? []
+        
+        for config in labelConfigurations {
+            let label = WeatherDetailLabel()
+            label.configure(symbolName: config.symbolName, title: config.title, text: config.text)
+            detailStackView.addArrangedSubview(label)
         }
     }
 }
 
+//MARK: - Segmented control
 extension DetailViewController {
     @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {

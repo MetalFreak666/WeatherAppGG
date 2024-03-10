@@ -18,7 +18,6 @@ class LocationsListViewController: UIViewController, UITableViewDelegate {
     private let cellReuseIdentifier = "CustomLocationCell"
     
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    private var storiedAirportLocations: [AirportLocation] = []
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -152,25 +151,25 @@ extension LocationsListViewController {
 // MARK: - UITableViewDataSource && UITableViewDelegate
 extension LocationsListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return storiedAirportLocations.count
+        return viewModel.storiedAirportLocations.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! LocationTableViewCell
-        let item = storiedAirportLocations[indexPath.row]
+        let item = viewModel.storiedAirportLocations[indexPath.row]
         cell.configure(symbol: UIImage(systemName: "airplane"), title: item.airportCode, subtitle: item.lastFetchDate)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let selectedLocation = storiedAirportLocations[indexPath.row]
+        let selectedLocation = viewModel.storiedAirportLocations[indexPath.row]
         navigateToDetailViewWithLocation(with: selectedLocation)
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction(style: .destructive, title: "Delete") { action, view, completionHandler in
-            let locationToRemove = self.storiedAirportLocations[indexPath.row]
+            let locationToRemove = self.viewModel.storiedAirportLocations[indexPath.row]
             self.context.delete(locationToRemove)
             
             do {
@@ -205,9 +204,9 @@ extension LocationsListViewController {
     func fetchLastAirportLocationsFromStorage() {
         let initAirportLocations: [String] = ["KAUS", "KPWM"]
         do {
-            self.storiedAirportLocations = try context.fetch(AirportLocation.fetchRequest())
+            self.viewModel.storiedAirportLocations = try context.fetch(AirportLocation.fetchRequest())
             
-            if storiedAirportLocations.isEmpty {
+            if self.viewModel.storiedAirportLocations.isEmpty {
                 for airport in initAirportLocations {
                     viewModel.getLocationForecast(airportId: airport) { weatherReport, error in
                         if let error {
@@ -265,7 +264,7 @@ extension LocationsListViewController {
     
     func reloadTableViewData() {
         do {
-            self.storiedAirportLocations = try context.fetch(AirportLocation.fetchRequest())
+            self.viewModel.storiedAirportLocations = try context.fetch(AirportLocation.fetchRequest())
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
