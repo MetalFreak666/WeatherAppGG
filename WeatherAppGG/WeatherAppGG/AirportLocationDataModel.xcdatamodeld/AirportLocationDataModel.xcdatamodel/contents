@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22757" systemVersion="23D60" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="AirportLocation" representedClassName="AirportLocation" syncable="YES">
+        <attribute name="airportCode" optional="YES" attributeType="String"/>
+        <attribute name="lastFetchDate" optional="YES" attributeType="String"/>
+        <relationship name="currentReport" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentWeatherReport"/>
+        <relationship name="forecastReport" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ForecastWeatherReport"/>
+    </entity>
+    <entity name="CurrentWeatherReport" representedClassName="CurrentWeatherReport" syncable="YES">
+        <attribute name="dateIssued" optional="YES" attributeType="String"/>
+        <attribute name="elevationFt" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="flightRules" optional="YES" attributeType="String"/>
+        <attribute name="ident" optional="YES" attributeType="String"/>
+        <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="pressureHg" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="pressureHpa" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="relativeHumidity" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="tempC" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="text" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="ForecastCondition" representedClassName="ForecastCondition" syncable="YES">
+        <attribute name="dateIssued" optional="YES" attributeType="String"/>
+        <attribute name="elevationFt" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="flightRules" optional="YES" attributeType="String"/>
+        <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="relativeHumidity" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="text" optional="YES" attributeType="String"/>
+        <relationship name="conditions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ForecastWeatherReport" inverseName="forecastConditions" inverseEntity="ForecastWeatherReport"/>
+        <relationship name="period" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ForecastConditionPeriod"/>
+    </entity>
+    <entity name="ForecastConditionPeriod" representedClassName="ForecastConditionPeriod" syncable="YES">
+        <attribute name="dateEnd" optional="YES" attributeType="String"/>
+        <attribute name="dateStart" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="ForecastPeriod" representedClassName="ForecastPeriod" syncable="YES">
+        <attribute name="dateEnd" optional="YES" attributeType="String"/>
+        <attribute name="dateStart" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="ForecastWeatherReport" representedClassName="ForecastWeatherReport" syncable="YES">
+        <attribute name="dateIssued" optional="YES" attributeType="String"/>
+        <attribute name="elevationFt" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="ident" optional="YES" attributeType="String"/>
+        <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="text" optional="YES" attributeType="String"/>
+        <relationship name="forecastConditions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ForecastCondition" inverseName="conditions" inverseEntity="ForecastCondition"/>
+        <relationship name="period" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ForecastPeriod"/>
+    </entity>
+</model>
