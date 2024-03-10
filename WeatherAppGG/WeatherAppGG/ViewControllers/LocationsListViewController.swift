@@ -42,7 +42,7 @@ class LocationsListViewController: UIViewController, UITableViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.tableView.reloadData()
+        self.reloadTableViewData()
     }
     
     // MARK: - Setup views and view layouts
@@ -151,7 +151,6 @@ extension LocationsListViewController {
 
 // MARK: - UITableViewDataSource && UITableViewDelegate
 extension LocationsListViewController: UITableViewDataSource {
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return storiedAirportLocations.count
     }
@@ -179,7 +178,7 @@ extension LocationsListViewController: UITableViewDataSource {
             } catch {
                 self.showFailedRequestToStorageAlert(errorMessage: "Could not remove location from the storage!")
             }
-            self.tableView.reloadData()
+            self.reloadTableViewData()
         }
         return UISwipeActionsConfiguration(actions: [action])
     }
@@ -202,23 +201,11 @@ extension LocationsListViewController: UITableViewDataSource {
 }
 
 // MARK: - CoreData
-#warning("DAORA: Fix me")
 extension LocationsListViewController {
     func fetchLastAirportLocationsFromStorage() {
         let initAirportLocations: [String] = ["KAUS", "KPWM"]
         do {
             self.storiedAirportLocations = try context.fetch(AirportLocation.fetchRequest())
-            
-            /*
-            for airportLocation in self.storiedLocation {
-                let aiportCode = airportLocation.airportCode
-                let forecastReport = airportLocation.forecastReport
-                let currentReport = airportLocation.currentReport
-                
-                if let forecastRep = forecastReport {
-                    print("Forecast Report \(forecastRep.lat)")
-                }
-            }*/
             
             if storiedAirportLocations.isEmpty {
                 for airport in initAirportLocations {
@@ -229,55 +216,36 @@ extension LocationsListViewController {
                             guard let report = weatherReport else { return }
                             
                             self.addAirportWeatherReportToStorage(airportId: airport, weatherReport: report)
-                            //var airportLocation = AirportLocation()
-                            //airportLocation.airportCode = airport
-                            //airportLocation.forecastReport = weatherReport?.report.forecast
-                            
-                            //self.addAirportLocationsToStorage(airportId: airport)
-                            self.tableView.reloadData()
+                            self.reloadTableViewData()
                         }
                     }
                 }
             }
-            
-            
-            
-            
-            
-            
-            /*
-            for storiedLocation in self.storiedLocation {
-                let location: LastSearchLocation = .init(iconName: "airplane",
-                                                         lastLocationTitle: storiedLocation.airportCode,
-                                                         lastLocationDate: storiedLocation.lastFetchDate ?? "No data provided"
-                )
-                //lastLocations.append(location)
-            }*/
-            
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                self.reloadTableViewData()
             }
         } catch {
             self.showFailedRequestToStorageAlert(errorMessage: "Could not fetch airport locations...")
         }
     }
     
-    func addAirportLocationsToStorage(airportId: String) {
-        let newSearchLocation = AirportLocation(context: self.context)
-        newSearchLocation.airportCode = airportId
-        newSearchLocation.lastFetchDate = getTimestampt()
-        
-        do {
-            try self.context.save()
-        } catch {
-            self.showFailedRequestToStorageAlert(errorMessage: "Could not save to the storage!")
-        }
-    }
-    
     func addAirportWeatherReportToStorage(airportId: String, weatherReport: WeatherReport) {
         let newSearchLocation = AirportLocation(context: self.context)
         newSearchLocation.airportCode = airportId
-        newSearchLocation.lastFetchDate = getTimestampt()
+        newSearchLocation.lastFetchDate = self.viewModel.getTimestampt()
+        
+        let currentReport = CurrentWeatherReport(context: self.context)
+        currentReport.dateIssued = weatherReport.report.conditions.dateIssued
+        currentReport.elevationFt = Int64(weatherReport.report.conditions.elevationFt)
+        currentReport.flightRules = weatherReport.report.conditions.flightRules
+        currentReport.ident = weatherReport.report.conditions.ident
+        currentReport.lat = weatherReport.report.conditions.lat
+        currentReport.lon = weatherReport.report.conditions.lon
+        currentReport.pressureHg = weatherReport.report.conditions.pressureHg
+        currentReport.pressureHpa = weatherReport.report.conditions.pressureHpa
+        currentReport.relativeHumidity = Int16(weatherReport.report.conditions.relativeHumidity)
+        currentReport.tempC = Int16(weatherReport.report.conditions.tempC)
+        currentReport.text = weatherReport.report.conditions.text
         
         let forecastReport = ForecastWeatherReport(context: self.context)
         forecastReport.ident = weatherReport.report.forecast.ident
@@ -286,6 +254,7 @@ extension LocationsListViewController {
         forecastReport.lon = weatherReport.report.forecast.lon
         
         newSearchLocation.forecastReport = forecastReport
+        newSearchLocation.currentReport = currentReport
         
         do {
             try self.context.save()
@@ -294,15 +263,14 @@ extension LocationsListViewController {
         }
     }
     
-}
-
-//MARK: - DateFormatter
-extension LocationsListViewController {
-    private func getTimestampt() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let dateString = dateFormatter.string(from: Date())
-        
-        return dateString
+    func reloadTableViewData() {
+        do {
+            self.storiedAirportLocations = try context.fetch(AirportLocation.fetchRequest())
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        } catch {
+            self.showFailedRequestToStorageAlert(errorMessage: "Could not update TableView data!!")
+        }
     }
 }

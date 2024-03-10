@@ -34,7 +34,6 @@ struct AlamofireWeatherForecastHTTPClient: WeatherForecastHTTPClient {
                         print("ERROR: \(error)")
                         completion(nil, error)
                     }
-                    
                 }
             }
     }
