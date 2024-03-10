@@ -27,6 +27,7 @@ class LocationsListViewController: UIViewController, UITableViewDelegate {
         setupView()
         setupLayoutConstraints()
         setupTableView()
+        setupInitialData()
         loadingIndicator.startAnimating()
         submitView.submitAction = { locationText in
             if let location = locationText, !location.isEmpty {
@@ -36,7 +37,6 @@ class LocationsListViewController: UIViewController, UITableViewDelegate {
                 self.showEmptyLocationAlert()
             }
         }
-        fetchLastAirportLocationsFromStorage()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,6 +82,16 @@ class LocationsListViewController: UIViewController, UITableViewDelegate {
         ])
         
         view.bringSubviewToFront(loadingIndicator)
+    }
+    
+    private func setupInitialData() {
+        self.viewModel.fetchLastAirportLocationsFromStorage(context: context) { error in
+            if let error {
+                self.showFailedRequestToStorageAlert(errorMessage: error.localizedDescription)
+            } else {
+                self.reloadTableViewData()
+            }
+        }
     }
     
     // MARK: - Navigation
@@ -139,9 +149,12 @@ extension LocationsListViewController {
                 self.showFailedRequestAlert(errorMessage: error.localizedDescription)
             } else {
                 if let report = weatherReport {
-                    self.addAirportWeatherReportToStorage(airportId: airportId, weatherReport: report)
+                    self.viewModel.addAirportWeatherReportToStorage(context: self.context, airportId: airportId, weatherReport: report) { error in
+                        if let error {
+                            self.showFailedRequestToStorageAlert(errorMessage: error.localizedDescription)
+                        }
+                    }
                 }
-                
                 self.navigateToDetailView(with: weatherReport)
             }
         }
@@ -196,70 +209,6 @@ extension LocationsListViewController: UITableViewDataSource {
         headerView.addSubview(label)
         
         return headerView
-    }
-}
-
-// MARK: - CoreData
-extension LocationsListViewController {
-    func fetchLastAirportLocationsFromStorage() {
-        let initAirportLocations: [String] = ["KAUS", "KPWM"]
-        do {
-            self.viewModel.storiedAirportLocations = try context.fetch(AirportLocation.fetchRequest())
-            
-            if self.viewModel.storiedAirportLocations.isEmpty {
-                for airport in initAirportLocations {
-                    viewModel.getLocationForecast(airportId: airport) { weatherReport, error in
-                        if let error {
-                            self.showFailedRequestAlert(errorMessage: error.localizedDescription)
-                        } else {
-                            guard let report = weatherReport else { return }
-                            
-                            self.addAirportWeatherReportToStorage(airportId: airport, weatherReport: report)
-                            self.reloadTableViewData()
-                        }
-                    }
-                }
-            }
-            DispatchQueue.main.async {
-                self.reloadTableViewData()
-            }
-        } catch {
-            self.showFailedRequestToStorageAlert(errorMessage: "Could not fetch airport locations...")
-        }
-    }
-    
-    func addAirportWeatherReportToStorage(airportId: String, weatherReport: WeatherReport) {
-        let newSearchLocation = AirportLocation(context: self.context)
-        newSearchLocation.airportCode = airportId
-        newSearchLocation.lastFetchDate = self.viewModel.getTimestampt()
-        
-        let currentReport = CurrentWeatherReport(context: self.context)
-        currentReport.dateIssued = weatherReport.report.conditions.dateIssued
-        currentReport.elevationFt = Int64(weatherReport.report.conditions.elevationFt)
-        currentReport.flightRules = weatherReport.report.conditions.flightRules
-        currentReport.ident = weatherReport.report.conditions.ident
-        currentReport.lat = weatherReport.report.conditions.lat
-        currentReport.lon = weatherReport.report.conditions.lon
-        currentReport.pressureHg = weatherReport.report.conditions.pressureHg
-        currentReport.pressureHpa = weatherReport.report.conditions.pressureHpa
-        currentReport.relativeHumidity = Int16(weatherReport.report.conditions.relativeHumidity)
-        currentReport.tempC = Int16(weatherReport.report.conditions.tempC)
-        currentReport.text = weatherReport.report.conditions.text
-        
-        let forecastReport = ForecastWeatherReport(context: self.context)
-        forecastReport.ident = weatherReport.report.forecast.ident
-        forecastReport.dateIssued = weatherReport.report.forecast.dateIssued
-        forecastReport.lat = weatherReport.report.forecast.lat
-        forecastReport.lon = weatherReport.report.forecast.lon
-        
-        newSearchLocation.forecastReport = forecastReport
-        newSearchLocation.currentReport = currentReport
-        
-        do {
-            try self.context.save()
-        } catch {
-            self.showFailedRequestToStorageAlert(errorMessage: "Could not save to the storage!")
-        }
     }
     
     func reloadTableViewData() {
